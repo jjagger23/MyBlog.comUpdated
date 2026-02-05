@@ -1,55 +1,60 @@
-/* 7_transition.css
-   CSS for the journal layout + hover transitions + jump menu behavior.
-   (I kept this organized by sections so it’s easy to tweak later.)
+/* 
+   CSS for the blog layout and hover effects
+   This file handles article transitions, navigation behavior,
+   and small visual details like the read more arrow.
 */
 
-/* -----------------------
-   Basic page layout
------------------------- */
+/* Make sure padding doesn’t break widths */
 * {
     box-sizing: border-box;
 }
 
+/* Basic page setup */
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Sidebar nav */
+/* -----------------------------
+   Left navigation bar
+------------------------------ */
+
 #menuItems {
     position: fixed;
     left: 0;
     top: 0;
     width: 240px;
-    height: 100vh;              /* spans full height of the window */
-    background: #000;
+    height: 100vh;        /* keeps the menu full height */
+    background: black;
     display: flex;
     flex-direction: column;
-    padding: 0;
 }
 
-/* nav buttons */
+/* Style for each navigation button */
 #menuItems button {
     width: 100%;
-    border: 1px solid #111;
-    padding: 14px 10px;
+    padding: 14px;
     font-size: 18px;
-    color: #fff;
-    background: #1e1eff;        /* default blue like the screenshot vibe */
+    color: white;
+    background: #1e1eff;
+    border: 1px solid #111;
     cursor: pointer;
 }
 
-/* When user hovers over a navigation button, background changes */
+/* Change color when hovering over nav buttons */
 #menuItems button:hover {
-    background: #c59a1a;        /* gold-ish hover (you can swap colors if needed) */
+    background: #c59a1a;
 }
 
-/* Main content pushed right to make room for the fixed nav */
+/* Push the main content over so it doesn't sit under the menu */
 main {
     margin-left: 240px;
 }
 
-/* Header bar */
+/* -----------------------------
+   Header area
+------------------------------ */
+
 header {
     background: red;
     height: 140px;
@@ -59,144 +64,125 @@ header {
 }
 
 header p {
-    margin: 0;
     font-size: 48px;
     font-family: "Times New Roman", Times, serif;
+    margin: 0;
 }
 
-/* Title */
+/* Page title */
 h1 {
     text-align: center;
     font-family: "Times New Roman", Times, serif;
     font-size: 44px;
-    margin: 30px 0 20px;
+    margin: 30px 0;
 }
 
-/* Article grid */
+/* -----------------------------
+   Article layout
+------------------------------ */
+
 #container {
     display: grid;
-    grid-template-columns: repeat(4, minmax(220px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 36px;
     padding: 10px 40px 40px;
-    align-items: start;
 }
 
-/* -----------------------
-   Article transitions
------------------------- */
-
-/* Start with lightly-colored text and a "collapsed" article */
+/* Articles start lighter and smaller */
 article {
-    color: #b8b8b8;             /* lightly-colored text */
+    color: #b8b8b8;
+    max-height: 360px;
     overflow: hidden;
-    max-height: 360px;          /* keeps it compact initially */
-    transition: color 2s, max-height 2s;  /* smooth over 2 seconds */
+    transition: color 2s, max-height 2s;  /* smooth expand + darken */
 }
 
-/* Hover = text gets darker AND article expands over 2 seconds */
+/* When hovering, article darkens and expands */
 article:hover {
     color: #222;
-    max-height: 1200px;         /* expands to show more content */
+    max-height: 1200px;
 }
 
-/* Article headings */
+/* Article titles */
 article h2 {
-    margin: 0 0 10px;
     font-size: 24px;
-    font-weight: bold;
-    color: inherit;             /* stays consistent with hover darkening */
+    margin-bottom: 10px;
 }
 
-/* Requirement:
-   The first letter of an article's main text receives Times New Roman font, 36px.
-   The "Read more..." is unaffected.
-   (So we target ONLY the first content paragraph inside each article.) */
+/* First letter styling for the main paragraph only */
 article > p:first-of-type::first-letter {
     font-family: "Times New Roman", Times, serif;
     font-size: 36px;
-    line-height: 1;
-    margin-right: 4px;
     float: left;
+    margin-right: 4px;
 }
 
-/* -----------------------
-   "Read more..." Google links + arrow icon
------------------------- */
+/* -----------------------------
+   Read more links + arrow icon
+------------------------------ */
 
-/* Keep read more links readable even when article text is light */
 article a {
     color: #2a33cc;
     font-weight: bold;
-    text-decoration: underline;
 }
 
-/* Add the arrow icon to links that point to Google */
+/* Adds the arrow image to Google links */
 article a[href*="google.com"]::after {
     content: "";
-    display: inline-block;
     width: 22px;
     height: 22px;
+    display: inline-block;
     margin-left: 8px;
-    vertical-align: -4px;
     background: url("arrow.png") no-repeat center / contain;
+    vertical-align: -4px;
 }
 
-/* -----------------------
+/* -----------------------------
    Jump menu (Recent Articles)
------------------------- */
+------------------------------ */
 
-/* Hide by default */
+/* Hidden until user hovers over Recent Articles */
 #jumpMenu {
+    display: none;
     list-style: none;
-    margin: 0;
     padding: 8px 0;
-    background: #c59a1a;        /* menu background when opened */
-    display: none;              /* only appears on hover */
-    border-bottom: 1px solid #111;
+    background: #c59a1a;
 }
 
-/* Show jump menu when hovering over the Recent Articles button */
+/* Show the menu on hover */
 #recentArticles:hover + #jumpMenu,
 #jumpMenu:hover {
     display: block;
 }
 
 /* Jump menu links */
-#jumpMenu li {
-    padding: 0;
-    margin: 0;
-}
-
 #jumpMenu a {
     display: block;
     padding: 2px 16px;
-    color: #1e1eff;             /* blue text like the screenshot */
-    text-decoration: none;
     font-size: 20px;
+    color: #1e1eff;
+    text-decoration: none;
 }
 
-/* Requirement:
-   When user hovers over a link in the jump menu, font color AND background change */
+/* Change color when hovering over jump links */
 #jumpMenu a:hover {
-    background: #1e1eff;        /* blue highlight */
-    color: #fff;                /* white text */
+    background: #1e1eff;
+    color: white;
 }
 
-/* -----------------------
-   "Thank you for visiting!" styling (matches the look from your screenshots)
------------------------- */
+/* -----------------------------
+   Thank you box styling
+------------------------------ */
+
 #thanks {
     text-align: right;
     padding: 10px 40px 30px;
 }
 
 #thanks a {
-    display: inline-block;
-    padding: 18px 28px;
-    background: #87cefa;
-    border: 2px solid #2b2b2b;
     font-family: "Times New Roman", Times, serif;
     font-size: 34px;
+    background: #87cefa;
+    padding: 18px 28px;
+    border: 2px solid #2b2b2b;
     color: #0b2aa5;
-    text-decoration: underline;
 }
